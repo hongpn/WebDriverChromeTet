@@ -14,10 +14,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.util.List;
@@ -473,6 +475,113 @@ public class WebUI {
                 Assert.fail("Timeout waiting for Angular load. (" + PAGE_LOAD_TIMEOUT + "s)");
             }
         }
+    }
+    // Dropdown
+    @Step("Select by Text")
+    public static void selectOptionByText(By by,String Text){
+        Select select=new Select(DriverManager.getDriver().findElement(by));
+        select.selectByVisibleText(Text);
+    }
+    @Step("Select by Value")
+    public static void selectOptionByValue(By by,String value){
+        Select select=new Select(DriverManager.getDriver().findElement(by));
+        select.selectByValue(value);
+    }
+    @Step("Select by Index")
+    public static void selectOptionByIndex(By by,int index){
+        Select select=new Select(DriverManager.getDriver().findElement(by));
+        select.selectByIndex(index);
+    }
+    @Step("Select get total options then compare {1}")
+    public static void verifyTotalOptions(By by,int total)
+    {
+        Select select=new Select(DriverManager.getDriver().findElement(by));
+        Assert.assertEquals(total,select.getOptions().size(),"Not equal options in total");
+    }
+    @Step("Select get selected option then compare {1}")
+    public static boolean verifySelectedByText(By by, String text)
+    {
+        Select select=new Select(DriverManager.getDriver().findElement(by));
+        //System.out.println("Selected value is: "+select.getFirstSelectedOption().getText());
+        return select.getFirstSelectedOption().getText().equals(text);
+    }
+    //Frame
+    @Step("Frame: select frame by index {1}")
+    public static void switchToFrameByIndex(int index)
+    {
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(PAGE_LOAD_TIMEOUT), Duration.ofMillis(500));
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(index));
+    }
+    @Step("Frame: select frame by id or name {1}")
+    public static void switchToFrameById(String idOrName)
+    {
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(PAGE_LOAD_TIMEOUT), Duration.ofMillis(500));
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(idOrName));
+    }
+    @Step("Frame: switch to main window")
+    public static void switchToMainWindow(){
+        DriverManager.getDriver().switchTo().defaultContent();
+    }
+    // Alert
+    @Step("Alert: Choose agree")
+    public static void alertAccept(){DriverManager.getDriver().switchTo().alert().accept();}
+    @Step("Alert: Choose disagree")
+    public static void alertDismiss(){DriverManager.getDriver().switchTo().alert().dismiss();}
+    @Step("Alert: get text")
+    public static void alertGetText(){DriverManager.getDriver().switchTo().alert().getText();}
+    @Step("Alert: send text to alert")
+    public static void alertSetText(String text){DriverManager.getDriver().switchTo().alert().sendKeys(text);}
+    @Step("Frame: select frame by By")
+    public static void switchToFrameByElement(By by)
+    {
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(PAGE_LOAD_TIMEOUT), Duration.ofMillis(500));
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(by));
+    }
+    @Step("Alert: check whether alert present or not")
+    public static boolean verifyAlertPresent() {
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(PAGE_LOAD_TIMEOUT), Duration.ofMillis(500));
+        if (wait.until(ExpectedConditions.alertIsPresent()) == null) {
+            //System.out.println("Alert not exists");
+            return false;
+        } else {
+            //System.out.println("Alert exists");
+            return true;
+        }
+    }
+    public static void uploadFile(By uploadBtn, String filePath) throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(PAGE_LOAD_TIMEOUT), Duration.ofMillis(500));
+        wait.until(ExpectedConditions.elementToBeClickable(uploadBtn));
+        Actions action = new Actions(DriverManager.getDriver());
+        DriverManager.getDriver().findElement(uploadBtn).click();
+        Thread.sleep(1);
 
+        // Khởi tạo Robot class
+        Robot rb = null;
+        try {
+            rb = new Robot();
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+
+        // Copy File path vào Clipboard
+        StringSelection str = new StringSelection(filePath);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(str, null);
+
+        Thread.sleep(1000);
+
+        // Nhấn Control+V để dán
+        rb.keyPress(KeyEvent.VK_CONTROL);
+        rb.keyPress(KeyEvent.VK_V);
+
+        // Xác nhận Control V trên
+        rb.keyRelease(KeyEvent.VK_CONTROL);
+        rb.keyRelease(KeyEvent.VK_V);
+
+        Thread.sleep(1000);
+
+        // Nhấn Enter
+        rb.keyPress(KeyEvent.VK_ENTER);
+        rb.keyRelease(KeyEvent.VK_ENTER);
+        action.contextClick().build().perform();
     }
 }
