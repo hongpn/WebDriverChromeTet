@@ -4,7 +4,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.awt.*;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class ExcelHelper {
+public class ExcelHelpers {
     private FileInputStream fis;
     private FileOutputStream fileOut;
     private Workbook workbook;
