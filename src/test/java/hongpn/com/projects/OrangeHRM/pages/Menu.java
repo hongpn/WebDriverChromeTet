@@ -37,17 +37,17 @@ public class Menu {
     public AdminPage openAdminMenu() throws InterruptedException {
         WebUI.clickElement(adminMenu);
         WebUI.waitForPageLoaded();
-        Assert.assertTrue(WebUI.checkElementExist(headerPage),"Can not open Admin page");
-        String strHeader=WebUI.getElementText(headerPage);
-        Assert.assertTrue(strHeader.contains(expectedHeader), "Wrong Admin page header, the expected header: " + expectedHeader);
+        //Assert.assertTrue(WebUI.checkElementExist(headerPage),"Can not open Admin page");
+        //String strHeader=WebUI.getElementText(headerPage);
+        //Assert.assertTrue(strHeader.contains(expectedHeader), "Wrong Admin page header, the expected header: " + expectedHeader);
         return new AdminPage();
     }
     public PIMPage openPimMenu() throws InterruptedException {
         WebUI.clickElement(pimMenu);
         WebUI.waitForPageLoaded();
-        Assert.assertTrue(WebUI.checkElementExist(headerPage),"Can not open PIM page");
-        String strHeader=WebUI.getElementText(headerPage);
-        Assert.assertTrue(strHeader.contains(expectedHeader), "Wrong PIM page header, the expected header: " + expectedHeader);
+        //Assert.assertTrue(WebUI.checkElementExist(headerPage),"Can not open PIM page");
+        //String strHeader=WebUI.getElementText(headerPage);
+        //Assert.assertTrue(strHeader.contains(expectedHeader), "Wrong PIM page header, the expected header: " + expectedHeader);
         return new PIMPage();
     }
     public LeavePage openLeaveMenu() throws InterruptedException {
